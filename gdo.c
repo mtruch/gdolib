@@ -229,6 +229,7 @@ esp_err_t gdo_init(const gdo_config_t *config) {
  * @return ESP_OK on success, ESP_ERR_INVALID_STATE if the driver is not initialized.
 */
 esp_err_t gdo_deinit(void) {
+    ESP_LOGV(TAG, "GDO Start of gdo_deinit");
     esp_err_t err = ESP_OK;
     if (!gdo_tx_queue) { // using this as a proxy for the driver being initialized
         return ESP_ERR_INVALID_STATE;
@@ -349,6 +350,7 @@ esp_err_t gdo_start(gdo_event_callback_t event_callback, void *user_arg) {
  * @note This function is performed in a critical section and should be called with caution.
 */
 esp_err_t gdo_get_status(gdo_status_t *status) {
+    ESP_LOGV(TAG, "GDO Start of gdo_get_status()");
     if (!status) {
         return ESP_ERR_INVALID_ARG;
     }
@@ -364,6 +366,7 @@ esp_err_t gdo_get_status(gdo_status_t *status) {
  * ESP_ERR_INVALID_STATE if the driver is not started or already synced.
 */
 esp_err_t gdo_sync(void) {
+    ESP_LOGV(TAG, "GDO Start of gdo_sync");
     if (!gdo_main_task_handle || g_status.synced) { // using this as a proxy for the driver being started
         return ESP_ERR_INVALID_STATE;
     }
@@ -746,6 +749,7 @@ esp_err_t gdo_set_client_id(uint32_t client_id) {
  * ESP_ERR_INVALID_STATE if the protocol is already set.
 */
 esp_err_t gdo_set_protocol(gdo_protocol_type_t protocol) {
+    ESP_LOGV(TAG, "GDO Start of gdo_set_protocol");
     if (g_status.protocol > 0 && g_status.protocol < GDO_PROTOCOL_MAX) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -818,6 +822,7 @@ void gdo_set_toggle_only(bool toggle_only) {
  * is queued and The task will then delete itself. The status of the sync is stored in the g_status.synced.
 */
 static void gdo_sync_task(void* arg) {
+    ESP_LOGV(TAG, "GDO Start of gdo_sync_task()");
     bool synced = true;
 
     if (g_status.protocol != GDO_PROTOCOL_SEC_PLUS_V2) {
@@ -1202,6 +1207,7 @@ static esp_err_t queue_v1_command(gdo_v1_command_t command) {
  *  ESP_ERR_NO_MEM if the queue is full, ESP_FAIL if the encoding fails.
 */
 static esp_err_t queue_command(gdo_command_t command, uint8_t nibble, uint8_t byte1, uint8_t byte2) {
+    ESP_LOGV(TAG, "GDO Start of queue_command()");
     if (!gdo_tx_queue) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -1241,6 +1247,7 @@ static esp_err_t queue_command(gdo_command_t command, uint8_t nibble, uint8_t by
  * @return ESP_OK on success, other non-zero errors from the UART driver.
 */
 static esp_err_t transmit_packet(uint8_t *packet) {
+    ESP_LOGV(TAG, "GDO Start of transmit_packet()");
     esp_err_t err = ESP_OK;
 
     if (g_status.protocol == GDO_PROTOCOL_SEC_PLUS_V2) {
@@ -1296,6 +1303,7 @@ static esp_err_t transmit_packet(uint8_t *packet) {
  * @param packet The packet received from the GDO.
 */
 static void decode_v1_packet(uint8_t *packet) {
+    ESP_LOGV(TAG, "GDO Start of decode_v1_packet()");
     gdo_v1_command_t cmd = (gdo_v1_command_t)packet[0];
     uint8_t resp = packet[1];
 
@@ -1336,6 +1344,7 @@ static void decode_v1_packet(uint8_t *packet) {
  * @param packet The packet received from the GDO.
 */
 static void decode_packet(uint8_t *packet) {
+    ESP_LOGV(TAG, "GDO Start of decode_packet()");
     uint32_t rolling = 0;
     uint64_t fixed = 0;
     uint32_t data = 0;
@@ -1429,6 +1438,7 @@ static void decode_packet(uint8_t *packet) {
  * @brief Main task that handles all the events from the UART and other tasks.
 */
 static void gdo_main_task(void* arg) {
+    ESP_LOGV(TAG, "GDO Start of gdo_main_task()");
     uint8_t rx_buffer[RX_BUFFER_SIZE * 2]; // double the size to prevent overflow
     uint16_t rx_buf_index = 0;
     uint8_t rx_pending = 0;

@@ -1,5 +1,7 @@
 # gdolib
 
+Forked from Konnected IO https://github.com/konnected-io/gdolib
+
 Garage door opener library for controlling security+ version 1.0 and 2.0 garage door openers for ESP32 microcontrollers.
 
 

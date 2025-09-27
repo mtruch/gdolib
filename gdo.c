@@ -117,6 +117,7 @@ static portMUX_TYPE gdo_spinlock = portMUX_INITIALIZER_UNLOCKED;
  * ESP_ERR_INVALID_STATE if the driver is already initialized.
 */
 esp_err_t gdo_init(const gdo_config_t *config) {
+    ESP_LOGV(TAG, "GDO Start of gdo_init");
     esp_err_t err = ESP_OK;
 
     if (!config || config->uart_num >= UART_NUM_MAX ||
@@ -314,6 +315,7 @@ done:
  * @return ESP_OK on success, ESP_ERR_NO_MEM if task creation fails, ESP_ERR_INVALID_STATE if the driver is not initialized.
 */
 esp_err_t gdo_start(gdo_event_callback_t event_callback, void *user_arg) {
+    ESP_LOGV(TAG, "GDO Start of gdo_start");
     if (!gdo_tx_queue) { // using this as a proxy for the driver being initialized
         return ESP_ERR_INVALID_STATE;
     }

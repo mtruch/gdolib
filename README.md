@@ -16,4 +16,4 @@ At this point it should have successfully built the project and the output will 
 To extract the library, navigate to `build/esp-idf/gdolib` and copy the `libgdolib.a` file to another project folder where you want it to be statically linked.
 
 ## Credits:
-This library incorporates secplus by Clayton Smith https://github.com/argilo/secplus
+This library incorporates secplus by Clayton Smith https://github.com/argilo/secplus and changes by Konnected IO https://github.com/konnected-io/gdolib
